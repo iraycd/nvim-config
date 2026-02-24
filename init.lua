@@ -18,7 +18,14 @@ vim.keymap.set("n", "<leader>x", ":bd<CR>")                     -- close tab
 
 -- Git UI (opens lazygit in the git root of the current file, or lets you pick a repo)
 local function open_lazygit(dir)
-  vim.fn.termopen("lazygit", { cwd = dir })
+  vim.fn.termopen("lazygit", {
+    cwd = dir,
+    on_exit = function()
+      vim.schedule(function()
+        vim.cmd("bd!")
+      end)
+    end,
+  })
   vim.cmd("startinsert")
 end
 
@@ -106,7 +113,14 @@ require("lazy").setup({
         end
 
         vim.cmd("enew")
-        vim.fn.termopen("lazygit", { cwd = git_root })
+        vim.fn.termopen("lazygit", {
+          cwd = git_root,
+          on_exit = function()
+            vim.schedule(function()
+              vim.cmd("bd!")
+            end)
+          end,
+        })
         vim.cmd("startinsert")
       end
 
@@ -141,10 +155,13 @@ require("lazy").setup({
         },
         on_attach = function(bufnr)
           local api = require("nvim-tree.api")
-          -- Load default mappings first
           api.config.mappings.default_on_attach(bufnr)
-          -- Press gl on any folder/file in the tree to open lazygit for that repo
-          vim.keymap.set("n", "gl", open_lazygit_for_node, { buffer = bufnr, desc = "Open lazygit for repo" })
+          local opts = function(desc) return { buffer = bufnr, desc = desc, noremap = true, silent = true } end
+          -- l = drill into folder, h = go back up
+          vim.keymap.set("n", "l", api.tree.change_root_to_node, opts("CD into folder"))
+          vim.keymap.set("n", "h", api.tree.change_root_to_parent, opts("Go up to parent"))
+          -- gl = open lazygit for repo
+          vim.keymap.set("n", "gl", open_lazygit_for_node, opts("Open lazygit for repo"))
         end,
       })
     end,

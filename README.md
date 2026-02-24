@@ -58,6 +58,8 @@ Leader key is `Space`.
 | `x` | Cut |
 | `c` | Copy |
 | `p` | Paste |
+| `l` | Drill into folder (set as root) |
+| `h` | Go back up to parent root |
 | `Backspace` | Go to parent directory |
 | `-` | Navigate up one directory |
 | `gl` | Open lazygit for the repo under cursor |
@@ -92,8 +94,9 @@ Leader key is `Space`.
 | Shortcut | Action |
 |----------|--------|
 | `Space + g g` | Open lazygit (auto-detects repo, or lets you pick) |
+| `gl` (in file tree) | Open lazygit for the repo under cursor |
 
-Press `q` to close lazygit, then `:bd` to close the buffer.
+Press `q` to close lazygit. The buffer auto-closes.
 
 ### Git - Gitsigns (inline changes)
 
