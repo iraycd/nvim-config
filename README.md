@@ -60,6 +60,7 @@ Leader key is `Space`.
 | `p` | Paste |
 | `Backspace` | Go to parent directory |
 | `-` | Navigate up one directory |
+| `gl` | Open lazygit for the repo under cursor |
 | `g?` | Show all keybinds |
 
 ### File Search

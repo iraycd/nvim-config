@@ -87,6 +87,29 @@ require("lazy").setup({
     "nvim-tree/nvim-tree.lua",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
+      local function open_lazygit_for_node()
+        local api = require("nvim-tree.api")
+        local node = api.tree.get_node_under_cursor()
+        if not node then return end
+
+        -- Get the path (use the node's path, or parent dir for files)
+        local dir = node.absolute_path
+        if node.type ~= "directory" then
+          dir = vim.fn.fnamemodify(dir, ":h")
+        end
+
+        -- Find the git root from this path
+        local git_root = vim.fn.systemlist("git -C " .. vim.fn.shellescape(dir) .. " rev-parse --show-toplevel 2>/dev/null")[1]
+        if vim.v.shell_error ~= 0 or not git_root then
+          vim.notify("Not a git repository", vim.log.levels.WARN)
+          return
+        end
+
+        vim.cmd("enew")
+        vim.fn.termopen("lazygit", { cwd = git_root })
+        vim.cmd("startinsert")
+      end
+
       require("nvim-tree").setup({
         sync_root_with_cwd = false,
         respect_buf_cwd = false,
@@ -116,6 +139,13 @@ require("lazy").setup({
           enable = true,
           ignore = false,
         },
+        on_attach = function(bufnr)
+          local api = require("nvim-tree.api")
+          -- Load default mappings first
+          api.config.mappings.default_on_attach(bufnr)
+          -- Press gl on any folder/file in the tree to open lazygit for that repo
+          vim.keymap.set("n", "gl", open_lazygit_for_node, { buffer = bufnr, desc = "Open lazygit for repo" })
+        end,
       })
     end,
   },
