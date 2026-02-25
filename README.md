@@ -34,6 +34,24 @@ Open `nvim` and plugins will auto-install on first launch.
 | [catppuccin](https://github.com/catppuccin/nvim) | Dark theme (mocha) |
 | [nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons) | File type icons |
 | multi-repo-git (custom) | Git status labels for nested repos |
+| [mason.nvim](https://github.com/williamboman/mason.nvim) | LSP server installer |
+| [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim) | Mason + lspconfig bridge |
+| [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) | LSP configuration |
+
+## Language Servers
+
+Auto-installed via Mason on first launch:
+
+| Language | Server |
+|----------|--------|
+| TypeScript/JavaScript | `ts_ls` |
+| Python | `pyright` |
+| Go | `gopls` |
+| Zig | `zls` |
+| Dart/Flutter | `dartls` |
+| Dockerfile | `dockerls` |
+| Docker Compose | `docker_compose_language_service` |
+| YAML | `yamlls` |
 
 ## Keyboard Shortcuts
 
@@ -130,6 +148,22 @@ Press `q` to close lazygit. The buffer auto-closes.
 | `Space + g m` | Manually refresh repo status labels |
 
 Repo status labels auto-refresh every 5 seconds and on file save.
+
+### LSP (Code Intelligence)
+
+| Shortcut | Action |
+|----------|--------|
+| `gd` | Go to definition (opens in new tab) |
+| `gD` | Go to definition (same buffer) |
+| `gr` | Find all references |
+| `gi` | Go to implementation |
+| `K` | Hover docs (show type/docs popup) |
+| `Space + rn` | Rename symbol across files |
+| `Space + ca` | Code action (quick fix, refactor) |
+| `Space + D` | Go to type definition |
+| `[d` | Previous diagnostic (error/warning) |
+| `]d` | Next diagnostic (error/warning) |
+| `Space + dd` | Show diagnostic details in float |
 
 ### File Navigation
 

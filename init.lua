@@ -16,6 +16,33 @@ vim.keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>")        -- next tab
 vim.keymap.set("n", "<S-Tab>", ":BufferLineCyclePrev<CR>")      -- previous tab
 vim.keymap.set("n", "<leader>x", ":bd<CR>")                     -- close tab
 
+-- LSP keybinds (set when a language server attaches to a buffer)
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ev)
+    local opts = function(desc) return { buffer = ev.buf, desc = desc } end
+
+    -- Go to definition in a new tab
+    vim.keymap.set("n", "gd", function()
+      vim.cmd("tab split")
+      vim.lsp.buf.definition()
+    end, opts("Go to definition (new tab)"))
+
+    -- Go to definition in same buffer (if you don't want a new tab)
+    vim.keymap.set("n", "gD", vim.lsp.buf.definition, opts("Go to definition (same buffer)"))
+
+    -- Other useful LSP shortcuts
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts("Find references"))
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts("Hover docs"))
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts("Go to implementation"))
+    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts("Rename symbol"))
+    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts("Code action"))
+    vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts("Type definition"))
+    vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts("Previous diagnostic"))
+    vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts("Next diagnostic"))
+    vim.keymap.set("n", "<leader>dd", vim.diagnostic.open_float, opts("Show diagnostic"))
+  end,
+})
+
 -- Git UI (opens lazygit in the git root of the current file, or lets you pick a repo)
 vim.keymap.set("n", "<leader>gg", function()
   local file_dir = vim.fn.expand("%:p:h")
@@ -227,6 +254,47 @@ require("lazy").setup({
       })
     end,
   },
+
+  -- LSP: server configs (provides filetypes/cmd/root_dir for vim.lsp.enable)
+  { "neovim/nvim-lspconfig" },
+
+  -- LSP: Mason (auto-install language servers)
+  {
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end,
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+    config = function()
+      require("mason-lspconfig").setup({
+        ensure_installed = {
+          "ts_ls",                             -- TypeScript/JavaScript
+          "pyright",                           -- Python
+          "gopls",                             -- Go
+          "zls",                               -- Zig
+          "dockerls",                          -- Dockerfile
+          "docker_compose_language_service",   -- Docker Compose
+          "yamlls",                            -- YAML
+          -- Note: dartls is not installed via Mason; it comes with the Dart SDK
+        },
+      })
+    end,
+  },
+})
+
+-- Enable LSP servers (Neovim 0.11+ native API)
+vim.lsp.enable({
+  "ts_ls",                             -- TypeScript/JavaScript
+  "pyright",                           -- Python
+  "gopls",                             -- Go
+  "zls",                               -- Zig
+  "dartls",                            -- Dart/Flutter
+  "dockerls",                          -- Dockerfile
+  "docker_compose_language_service",   -- Docker Compose
+  "yamlls",                            -- YAML
 })
 
 -- Load custom multi-repo git status plugin
