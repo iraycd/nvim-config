@@ -1,6 +1,6 @@
 # Neovim Config
 
-Personal Neovim configuration with an IDE-like setup. Optimized for multi-repo projects.
+Personal Neovim configuration with an IDE-like setup. Features LSP-powered code intelligence (go-to-definition, references, rename), multi-repo git integration, and fuzzy file search.
 
 ## Prerequisites
 
@@ -48,10 +48,15 @@ Auto-installed via Mason on first launch:
 | Python | `pyright` |
 | Go | `gopls` |
 | Zig | `zls` |
-| Dart/Flutter | `dartls` |
 | Dockerfile | `dockerls` |
 | Docker Compose | `docker_compose_language_service` |
 | YAML | `yamlls` |
+
+Requires separate SDK installation:
+
+| Language | Server | Install |
+|----------|--------|---------|
+| Dart/Flutter | `dartls` | Comes with the [Dart SDK](https://dart.dev/get-dart) or [Flutter SDK](https://flutter.dev/docs/get-started/install) |
 
 ## Keyboard Shortcuts
 
