@@ -17,25 +17,12 @@ vim.keymap.set("n", "<S-Tab>", ":BufferLineCyclePrev<CR>")      -- previous tab
 vim.keymap.set("n", "<leader>x", ":bd<CR>")                     -- close tab
 
 -- Git UI (opens lazygit in the git root of the current file, or lets you pick a repo)
-local function open_lazygit(dir)
-  vim.fn.termopen("lazygit", {
-    cwd = dir,
-    on_exit = function()
-      vim.schedule(function()
-        vim.cmd("bd!")
-      end)
-    end,
-  })
-  vim.cmd("startinsert")
-end
-
 vim.keymap.set("n", "<leader>gg", function()
   local file_dir = vim.fn.expand("%:p:h")
   if file_dir == "" or file_dir == "." then file_dir = vim.fn.getcwd() end
   local git_root = vim.fn.systemlist("git -C " .. vim.fn.shellescape(file_dir) .. " rev-parse --show-toplevel")[1]
   if vim.v.shell_error == 0 and git_root then
-    vim.cmd("enew")
-    open_lazygit(git_root)
+    require("lazygit").lazygit(git_root)
   else
     local cwd = vim.fn.getcwd()
     local repos = vim.fn.systemlist("find " .. vim.fn.shellescape(cwd) .. " -maxdepth 2 -name .git -type d")
@@ -49,8 +36,7 @@ vim.keymap.set("n", "<leader>gg", function()
     end
     vim.ui.select(choices, { prompt = "Select git repo:" }, function(choice)
       if choice then
-        vim.cmd("enew")
-        open_lazygit(choice)
+        require("lazygit").lazygit(choice)
       end
     end)
   end
@@ -112,16 +98,7 @@ require("lazy").setup({
           return
         end
 
-        vim.cmd("enew")
-        vim.fn.termopen("lazygit", {
-          cwd = git_root,
-          on_exit = function()
-            vim.schedule(function()
-              vim.cmd("bd!")
-            end)
-          end,
-        })
-        vim.cmd("startinsert")
+        require("lazygit").lazygit(git_root)
       end
 
       require("nvim-tree").setup({
