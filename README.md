@@ -31,6 +31,7 @@ Open `nvim` and plugins will auto-install on first launch.
 | [lazygit](https://github.com/kdheepak/lazygit.nvim) | Git UI |
 | [diffview](https://github.com/sindrets/diffview.nvim) | Git diff/history viewer |
 | [bufferline](https://github.com/akinsho/bufferline.nvim) | Tab-like buffer bar |
+| [flash.nvim](https://github.com/folke/flash.nvim) | Jump to any character/word on screen |
 | [catppuccin](https://github.com/catppuccin/nvim) | Dark theme (mocha) |
 | [nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons) | File type icons |
 | multi-repo-git (custom) | Git status labels for nested repos |
@@ -169,6 +170,15 @@ Repo status labels auto-refresh every 5 seconds and on file save.
 | `[d` | Previous diagnostic (error/warning) |
 | `]d` | Next diagnostic (error/warning) |
 | `Space + dd` | Show diagnostic details in float |
+
+### Flash (Jump / Teleport)
+
+| Shortcut | Action |
+|----------|--------|
+| `s` | Flash jump — type 1-2 chars, then pick a label to jump |
+| `S` | Flash treesitter — select treesitter nodes (functions, blocks) |
+
+Works in normal, visual, and operator-pending modes (e.g., `ds` to delete-to-flash, `ys` to yank-to-flash). Also enhances `/` and `?` search with jump labels.
 
 ### File Navigation
 

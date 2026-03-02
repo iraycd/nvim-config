@@ -1,6 +1,8 @@
 vim.opt.number = true
 vim.opt.relativenumber = false
 vim.opt.termguicolors = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 vim.g.mapleader = " "
 
 -- Start Neovim server for lazygit integration (edit files in parent nvim)
@@ -122,6 +124,7 @@ require("lazy").setup({
           nvimtree = true,
           telescope = { enabled = true },
           bufferline = true,
+          flash = true,
         },
       })
       vim.cmd.colorscheme("catppuccin")
@@ -283,6 +286,20 @@ require("lazy").setup({
   { "neovim/nvim-lspconfig" },
 
   -- LSP: Mason (auto-install language servers)
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    opts = {
+      search = { mode = "search" },
+      modes = { search = { enabled = true } },
+      label = { uppercase = false },
+    },
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash jump" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash treesitter" },
+    },
+  },
+
   {
     "williamboman/mason.nvim",
     config = function()
