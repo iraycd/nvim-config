@@ -3,6 +3,11 @@ vim.opt.relativenumber = false
 vim.opt.termguicolors = true
 vim.g.mapleader = " "
 
+-- Start Neovim server for lazygit integration (edit files in parent nvim)
+local server_pipe = "/tmp/nvim-server-" .. vim.fn.getpid() .. ".pipe"
+vim.fn.serverstart(server_pipe)
+vim.env.NVIM_SERVER = server_pipe
+
 -- Toggle file tree with <leader>e
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")
 
@@ -14,7 +19,26 @@ vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")     -- open buffers
 -- Buffer navigation
 vim.keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>")        -- next tab
 vim.keymap.set("n", "<S-Tab>", ":BufferLineCyclePrev<CR>")      -- previous tab
-vim.keymap.set("n", "<leader>x", ":bd<CR>")                     -- close tab
+vim.keymap.set("n", "<leader>x", function()                      -- close tab
+  local buf = vim.api.nvim_get_current_buf()
+  -- Don't close nvim-tree with this shortcut
+  if vim.bo[buf].filetype == "NvimTree" then return end
+  -- Count listed (file) buffers excluding nvim-tree
+  local file_bufs = vim.tbl_filter(function(b)
+    return vim.api.nvim_buf_is_valid(b)
+      and vim.bo[b].buflisted
+      and vim.bo[b].filetype ~= "NvimTree"
+  end, vim.api.nvim_list_bufs())
+  if #file_bufs <= 1 then
+    -- Last file buffer: close tree if open, then quit
+    vim.cmd("NvimTreeClose")
+    vim.cmd("bd")
+  else
+    -- Switch away first so we don't land on nvim-tree
+    vim.cmd("BufferLineCycleNext")
+    vim.cmd("bd " .. buf)
+  end
+end)
 
 -- LSP keybinds (set when a language server attaches to a buffer)
 vim.api.nvim_create_autocmd("LspAttach", {
