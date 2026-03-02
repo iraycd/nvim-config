@@ -3,7 +3,13 @@ vim.opt.relativenumber = false
 vim.opt.termguicolors = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+vim.opt.scrolloff = 999
+vim.opt.guicursor = "n-v-c-sm:block-blinkwait200-blinkon200-blinkoff200,i-ci-ve:ver25-blinkwait200-blinkon200-blinkoff200,r-cr-o:hor20-blinkwait200-blinkon200-blinkoff200"
 vim.g.mapleader = " "
+
+-- Half-page scroll with cursor centered
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
 -- Start Neovim server for lazygit integration (edit files in parent nvim)
 local server_pipe = "/tmp/nvim-server-" .. vim.fn.getpid() .. ".pipe"
@@ -193,6 +199,9 @@ require("lazy").setup({
           vim.keymap.set("n", "h", api.tree.change_root_to_parent, opts("Go up to parent"))
           -- gl = open lazygit for repo
           vim.keymap.set("n", "gl", open_lazygit_for_node, opts("Open lazygit for repo"))
+          -- Remove nvim-tree's default "s" so flash.nvim works in the tree
+          vim.keymap.del("n", "s", { buffer = bufnr })
+          vim.keymap.del("n", "S", { buffer = bufnr })
         end,
       })
     end,
