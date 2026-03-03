@@ -27,6 +27,7 @@ Open `nvim` and plugins will auto-install on first launch.
 | [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua) | File explorer |
 | [telescope](https://github.com/nvim-telescope/telescope.nvim) | Fuzzy finder |
 | [telescope-fzf-native](https://github.com/nvim-telescope/telescope-fzf-native.nvim) | Native fzf sorter |
+| [telescope-live-grep-args](https://github.com/nvim-telescope/telescope-live-grep-args.nvim) | Grep with ripgrep flags (filter by file/glob) |
 | [gitsigns](https://github.com/lewis6991/gitsigns.nvim) | Git gutter signs |
 | [lazygit](https://github.com/kdheepak/lazygit.nvim) | Git UI |
 | [diffview](https://github.com/sindrets/diffview.nvim) | Git diff/history viewer |
@@ -94,8 +95,17 @@ Leader key is `Space`.
 | Shortcut | Action |
 |----------|--------|
 | `Space + p` | Find files (fuzzy, any order like Ctrl+P) |
-| `Space + f` | Search text in files (like Ctrl+Shift+F) |
+| `Space + f` | Search text in files (supports ripgrep flags) |
 | `Space + b` | Switch between open buffers |
+
+**Inside live grep (`Space + f`):**
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl + k` | Quote the current prompt (needed before adding flags) |
+| `Ctrl + i` | Quote prompt and add `--iglob` for file/path filtering |
+
+Examples: `"myFunction" -g "*.ts"`, `"myFunction" -g "src/utils/*"`, `"myFunction" -t go`
 
 ### Tabs / Buffers
 
@@ -179,6 +189,10 @@ Repo status labels auto-refresh every 5 seconds and on file save.
 | `S` | Flash treesitter — select treesitter nodes (functions, blocks) |
 
 Works in normal, visual, and operator-pending modes (e.g., `ds` to delete-to-flash, `ys` to yank-to-flash). Also enhances `/` and `?` search with jump labels.
+
+### Clipboard
+
+System clipboard is synced — `y` copies to clipboard, `p` pastes from clipboard. No need for `"+y`.
 
 ### File Navigation
 
