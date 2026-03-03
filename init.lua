@@ -5,6 +5,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.scrolloff = 999
 vim.opt.guicursor = "n-v-c-sm:block-blinkwait200-blinkon200-blinkoff200,i-ci-ve:ver25-blinkwait200-blinkon200-blinkoff200,r-cr-o:hor20-blinkwait200-blinkon200-blinkoff200"
+vim.opt.clipboard = "unnamedplus"
 vim.g.mapleader = " "
 
 -- Half-page scroll with cursor centered
@@ -21,7 +22,7 @@ vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")
 
 -- Telescope keybinds
 vim.keymap.set("n", "<leader>p", ":Telescope find_files<CR>")  -- find files (like Ctrl+P)
-vim.keymap.set("n", "<leader>f", ":Telescope live_grep<CR>")   -- search in files
+vim.keymap.set("n", "<leader>f", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")   -- search in files
 vim.keymap.set("n", "<leader>b", ":Telescope buffers<CR>")     -- open buffers
 
 -- Buffer navigation
@@ -212,12 +213,25 @@ require("lazy").setup({
     dependencies = {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+      { "nvim-telescope/telescope-live-grep-args.nvim" },
     },
     config = function()
       local telescope = require("telescope")
+      local lga_actions = require("telescope-live-grep-args.actions")
       telescope.setup({
         defaults = {
           path_display = { "truncate" },
+        },
+        extensions = {
+          live_grep_args = {
+            auto_quoting = true,
+            mappings = {
+              i = {
+                ["<C-k>"] = lga_actions.quote_prompt(),
+                ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+              },
+            },
+          },
         },
         pickers = {
           find_files = {
@@ -226,6 +240,7 @@ require("lazy").setup({
         },
       })
       telescope.load_extension("fzf")
+      telescope.load_extension("live_grep_args")
     end,
   },
   {
