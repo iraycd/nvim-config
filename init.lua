@@ -101,6 +101,9 @@ vim.keymap.set("n", "<leader>gg", function()
     end)
   end
 end)
+-- Markdown preview
+vim.keymap.set("n", "<leader>mp", ":MarkdownPreviewToggle<CR>")
+
 vim.keymap.set("n", "<leader>gh", ":DiffviewFileHistory %<CR>") -- current file history
 vim.keymap.set("n", "<leader>gH", ":DiffviewFileHistory<CR>")   -- full repo history
 vim.keymap.set("n", "<leader>go", ":DiffviewOpen<CR>")           -- view all changes
@@ -322,6 +325,13 @@ require("lazy").setup({
       { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash jump" },
       { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash treesitter" },
     },
+  },
+
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = "cd app && bash install.sh",
   },
 
   {
