@@ -15,6 +15,7 @@ check node
 check make
 check git
 check lazygit
+check go
 
 if [ ${#MISSING[@]} -eq 0 ]; then
   echo "All prerequisites already installed."
@@ -37,6 +38,7 @@ for tool in "${MISSING[@]}"; do
     make)     BREW_PACKAGES+=(make) ;;
     git)      BREW_PACKAGES+=(git) ;;
     lazygit)  BREW_PACKAGES+=(lazygit) ;;
+    go)       BREW_PACKAGES+=(go) ;;
   esac
 done
 
